@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   shared_preferences: ^2.5.3
   flutter_bloc: ^9.1.1
+  lottie: ^3.3.1
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +67,7 @@ flutter:
     - assets/image/fruits/
     - assets/image/vegetables/
     - assets/image/grocerys/
+    - assets/lottie_Animation/
 
     # An image asset can refer to one or more resolution-specific "variants", see
     # https://flutter.dev/to/resolution-aware-images
