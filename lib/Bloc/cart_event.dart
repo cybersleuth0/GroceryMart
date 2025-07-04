@@ -8,15 +8,14 @@ class AddToCartEvent extends CartEvent {
 
 class RemoveFromCartEvent extends CartEvent {
   final String productName;
-
   RemoveFromCartEvent(this.productName);
 }
 
 class UpdateQuantityEvent extends CartEvent {
   final String productName;
-  final int change;
+  final int flag;
 
-  UpdateQuantityEvent(this.productName, this.change);
+  UpdateQuantityEvent(this.productName, this.flag);
 }
 
 class LoadCartEvent extends CartEvent {}

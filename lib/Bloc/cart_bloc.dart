@@ -82,5 +82,49 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         ),
       );
     });
+
+    on<RemoveFromCartEvent>((event, emit) async {
+      emit(LoadingState());
+      final prefs = await SharedPreferences.getInstance();
+      final storedItems = prefs.getStringList("product") ?? [];
+
+      storedItems.removeWhere((prodName) {
+        var item = jsonDecode(prodName);
+        return item["name"] == event.productName;
+      });
+      await prefs.setStringList("product", storedItems);
+      add(LoadCartEvent());
+    });
+
+    on<UpdateQuantityEvent>((event, emit) async {
+      emit(LoadingState());
+      final prefs = await SharedPreferences.getInstance();
+      final storedItems = prefs.getStringList("product") ?? [];
+
+      List<Map<String, dynamic>> updated = [];
+
+      for (var item in storedItems) {
+        var decodedItem = Map<String, dynamic>.from(jsonDecode(item));
+        if (decodedItem["name"] == event.productName) {
+          if (event.flag == 1) {
+            // Increase quantity
+            decodedItem["quantity"] = decodedItem["quantity"] + 1;
+          } else {
+            // Decrease quantity
+            if (decodedItem["quantity"] > 1) {
+              decodedItem["quantity"] = decodedItem["quantity"] - 1;
+            }
+          }
+        }
+        updated.add(decodedItem);
+      }
+
+      List<String> updatedJsonList = [];
+      for (var item in updated) {
+        updatedJsonList.add(json.encode(item));
+      }
+      await prefs.setStringList("product", updatedJsonList);
+      add(LoadCartEvent());
+    });
   }
 }
