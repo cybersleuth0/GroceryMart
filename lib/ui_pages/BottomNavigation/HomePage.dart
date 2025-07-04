@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../Bloc/cart_bloc.dart';
+import '../../Bloc/cart_event.dart';
 import '../../domain/app_db.dart';
-import 'cart_provider.dart';
 
 class HomePageNavigation extends StatelessWidget {
   const HomePageNavigation({super.key});
@@ -31,7 +33,6 @@ class HomePageNavigation extends StatelessWidget {
                     "Dhaka, Banassre",
                     style: TextStyle(color: Color(0xff4C4F4D), fontSize: 14),
                   ),
-                  // Smaller text
                 ],
               ),
             ],
@@ -39,241 +40,249 @@ class HomePageNavigation extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //search bar
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
-                  color: Color(0xfff2f3f2),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.search, size: 26, color: Color(0xff181B19)),
-                    SizedBox(width: 20),
-                    Expanded(
-                      child: TextField(
-                        cursorHeight: 20,
-                        keyboardType: TextInputType.name,
-                        decoration: InputDecoration(
-                          hintText: "Search Store",
-                          hintStyle: TextStyle(
-                            color: Color(0xff181B19),
-                            fontSize: 18,
-                            fontFamily: "Gilory_SemiBold",
-                          ),
-                          border: InputBorder.none,
-                        ),
-                        style: TextStyle(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            //Search Bar
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                color: const Color(0xfff2f3f2),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.search, size: 26, color: Color(0xff181B19)),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: TextField(
+                      cursorHeight: 20,
+                      keyboardType: TextInputType.name,
+                      decoration: const InputDecoration(
+                        hintText: "Search Store",
+                        hintStyle: TextStyle(
                           color: Color(0xff181B19),
                           fontSize: 18,
                           fontFamily: "Gilory_SemiBold",
                         ),
+                        border: InputBorder.none,
+                      ),
+                      style: const TextStyle(
+                        color: Color(0xff181B19),
+                        fontSize: 18,
+                        fontFamily: "Gilory_SemiBold",
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              SizedBox(height: 20),
-              //horizontal Banner listview
-              SizedBox(
-                height: 100,
-                width: 1000,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: HomeScreen.bannerImg.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.only(right: 10),
-                      height: 100,
-                      width: 300,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage(
-                            HomeScreen.bannerImg[index]["imgpath"],
-                          ),
+            ),
+            const SizedBox(height: 20),
+            // Banner List
+            SizedBox(
+              height: 100,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: HomeScreen.bannerImg.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: const EdgeInsets.only(right: 10),
+                    height: 100,
+                    width: 300,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: AssetImage(HomeScreen
+                            .bannerImg[index]["imgpath"]),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+            //Categories with Products
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: HomeScreen.itemcategories.length,
+              itemBuilder: (context, categoryIndex) {
+                final category = HomeScreen.itemcategories[categoryIndex];
+                final products = category["products"];
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Category Title
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 10),
+                      child: Text(
+                        category["category"],
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    );
-                  },
-                ),
-              ),
-              SizedBox(height: 20),
-              //horizontal listview for fruits
-              SizedBox(
-                height: 800,
-                child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: HomeScreen.itemcategories.length,
-                  itemBuilder: (context, categoryindex) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Category Title
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: 10,
-                          ),
-                          child: Text(
-                            HomeScreen
-                                .itemcategories[categoryindex]["category"],
-                            // Category Name
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                    ),
+
+                    // Product List (Horizontal)
+                    SizedBox(
+                      height: 220,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: products.length,
+                        itemBuilder: (context, index) {
+                          final product = products[index];
+
+                          return Container(
+                            margin: const EdgeInsets.only(right: 12),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
+                            width: 160,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: Colors.grey, width: 1),
                             ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 200, // Set fixed height for the product list
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            // Fix nested scrolling issue
-                            itemCount: HomeScreen
-                                .itemcategories[categoryindex]["products"]
-                                .length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                margin: EdgeInsets.only(right: 10),
-                                padding: EdgeInsets.symmetric(horizontal: 10),
-                                decoration: BoxDecoration(
-                                  color: Color(0xffffffff),
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                    color: Colors.grey,
-                                    width: 1,
-                                  ),
-                                ),
-                                width: 150,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // Image
-                                    Center(
-                                      child: Container(
-                                        width: 100,
-                                        height: 100,
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            fit: BoxFit.contain,
-                                            image: AssetImage(
-                                              HomeScreen
-                                                  .itemcategories[categoryindex]["products"][index]["imgpath"],
-                                            ),
-                                          ),
-                                        ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Image
+                                Center(
+                                  child: Container(
+                                    width: 110,
+                                    height: 110,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        fit: BoxFit.contain,
+                                        image: AssetImage(product["imgpath"]),
                                       ),
                                     ),
+                                  ),
+                                ),
 
-                                    // Product Name
+                                const SizedBox(height: 5),
+
+                                // Product Name
+                                Text(
+                                  product["name"],
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+
+                                // Quantity
+                                Text(
+                                  product["quantity"],
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+
+                                const Spacer(),
+
+                                // Price + Add Button
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: [
                                     Text(
-                                      HomeScreen
-                                          .itemcategories[categoryindex]["products"][index]["name"],
-                                      style: TextStyle(
-                                        fontSize: 16,
+                                      product["price"],
+                                      style: const TextStyle(
+                                        fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-
-                                    // Quantity
-                                    Text(
-                                      HomeScreen
-                                          .itemcategories[categoryindex]["products"][index]["quantity"],
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-
-                                    // Price & Add Button
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            HomeScreen
-                                                .itemcategories[categoryindex]["products"][index]["price"],
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
+                                    SizedBox(
+                                      width: 35,
+                                      height: 35,
+                                      child: MaterialButton(
+                                        padding: EdgeInsets.zero,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              12),
                                         ),
-                                        SizedBox(
-                                          width: 40,
-                                          height:40,
-                                          child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              elevation: 2,
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: 1,
-                                              ),
-                                              backgroundColor: Color(
-                                                0xff53B175,
-                                              ),
+                                        color: const Color(0xff53B175),
+                                        onPressed: () {
+                                          //Call Bloc
+                                          context.read<CartBloc>().add(
+                                            AddToCartEvent(product),
+                                          );
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              duration:
+                                              const Duration(seconds: 2),
+                                              backgroundColor:
+                                              const Color(0xff53B175),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(15),
+                                                BorderRadius.circular(10),
+                                              ),
+                                              content: Row(
+                                                children: [
+                                                  const Icon(Icons.check_circle,
+                                                      color: Colors.white),
+                                                  const SizedBox(width: 10),
+                                                  Expanded(
+                                                    child: Text(
+                                                      "${product["name"]} added to cart!",
+                                                      style: const TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                            onPressed: () {
-                                              // Add the product to the cart
-                                              CartProvider.addToCart(
-                                                HomeScreen
-                                                    .itemcategories[categoryindex]["products"][index],
-                                              );
-                                              ScaffoldMessenger.of(
-                                                context,
-                                              ).showSnackBar(
-                                                SnackBar(
-                                                  content: Text(
-                                                    "${HomeScreen.itemcategories[categoryindex]["products"][index]["name"]} added to cart!",
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                            child: Icon(
-                                              Icons.add,
-                                              color: Colors.white,
-                                              size: 30,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                          );
+                                        },
+                                        child: const Icon(Icons.add,
+                                            color: Colors.white, size: 28),
+                                      ),
+                                    )
                                   ],
                                 ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+            const SizedBox(height: 20),
+            // Footer
+            const Align(
+              alignment: Alignment.center,
+              child: Text(
+                "More Items coming soon...",
+                style: TextStyle(fontSize: 18, color: Colors.black87),
               ),
-              SizedBox(height: 20),
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  style: TextStyle(fontSize: 18, color: Colors.black87),
-                  "More Items comming soon...",
-                ),
-              ),
-              SizedBox(height: 20),
-            ],
-          ),
+            ),
+            const SizedBox(height: 20),
+          ],
         ),
       ),
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
