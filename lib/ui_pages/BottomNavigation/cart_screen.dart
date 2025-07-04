@@ -45,7 +45,7 @@ class _CartScreenState extends State<CartScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.shopping_cart_outlined, size: 100,
-                          color: Colors.grey[400]),
+                          color: Colors.grey[300]),
                       SizedBox(height: 20),
                       Text("Your cart is empty", style: TextStyle(fontSize: 22,
                           fontWeight: FontWeight.bold,
