@@ -37,7 +37,6 @@ graph TD
 2. **Clear Layer Separation**:
    - Presentation (UI)
    - Business Logic (BLoC)
-   - Data (Models + Storage)
 3. **Centralized Routing**
 
 ---
