@@ -47,9 +47,11 @@ class AllItems extends StatelessWidget {
               GridView.builder(
                 physics: const BouncingScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: screenWidth < 600 ? screenWidth / 2 : (screenWidth < 900 ? screenWidth / 3 : screenWidth / 5),
-                  crossAxisSpacing: 20,
-                  mainAxisExtent: screenHeight * 0.35,
+                  maxCrossAxisExtent: screenWidth < 600
+                      ? screenWidth / 2
+                      : (screenWidth < 900 ? screenWidth / 3 : screenWidth / 5),
+                  crossAxisSpacing: screenWidth < 600 ? 10 : 20,
+                  mainAxisExtent: screenWidth < 600 ? 220 : 230,
                   mainAxisSpacing: 20,
                 ),
                 shrinkWrap: true,
@@ -68,8 +70,9 @@ class AllItems extends StatelessWidget {
                       children: [
                         // Image
                         Center(
-                          child: Image.asset(HomeScreen
-                              .itemcategories[selectedIndex]["products"][index]["imgpath"],
+                          child: Image.asset(
+                            HomeScreen
+                                .itemcategories[selectedIndex]["products"][index]["imgpath"],
                             height: 100,
                             fit: BoxFit.contain,
                           ),

@@ -70,7 +70,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       // Calculate total
       double total = 0;
       for (var item in cartItems) {
-        final price = double.tryParse(item["price"].replaceAll("Rs", "").trim()) ?? 0;
+        final price =
+            double.tryParse(item["price"].replaceAll("Rs", "").trim()) ?? 0;
         total += price * (item["quantity"] ?? 1);
       }
 
@@ -124,6 +125,15 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       }
       await prefs.setStringList("product", updatedJsonList);
       add(LoadCartEvent());
+    });
+
+    //clearCart event
+    on<ClearCartEvent>((event, emit) {
+      emit(LoadingState());
+      SharedPreferences.getInstance().then((prefs) {
+        prefs.remove("product");
+        add(LoadCartEvent());
+      });
     });
   }
 }

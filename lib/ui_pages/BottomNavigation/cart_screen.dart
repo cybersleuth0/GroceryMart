@@ -267,9 +267,11 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                         SizedBox(height: 20),
                         ElevatedButton(
-                          onPressed: () =>
-                              Navigator.pushReplacementNamed(
-                                  context, AppRoutes.ROUTE_ORDERDONE),
+                          onPressed: () {
+                            context.read<CartBloc>().add(ClearCartEvent());
+                            Navigator.pushReplacementNamed(
+                                context, AppRoutes.ROUTE_ORDERDONE);
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xff53b175),
                             padding: EdgeInsets.symmetric(
