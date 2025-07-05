@@ -14,6 +14,11 @@ class AllItems extends StatelessWidget {
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
     final int selectedIndex = args["selectedIndex"];
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    // print("Screen Width: $screenWidth");
+    // print("Screen Height: $screenHeight");
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -41,11 +46,11 @@ class AllItems extends StatelessWidget {
               SizedBox(height: 40),
               GridView.builder(
                 physics: const BouncingScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.8,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: screenWidth < 600 ? screenWidth / 2 : (screenWidth < 900 ? screenWidth / 3 : screenWidth / 5),
+                  crossAxisSpacing: 20,
+                  mainAxisExtent: screenHeight * 0.35,
+                  mainAxisSpacing: 20,
                 ),
                 shrinkWrap: true,
                 itemCount:
@@ -58,24 +63,15 @@ class AllItems extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: Colors.grey, width: 1),
                     ),
-                    width: 150,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Image
                         Center(
-                          child: Container(
-                            width: 100,
+                          child: Image.asset(HomeScreen
+                              .itemcategories[selectedIndex]["products"][index]["imgpath"],
                             height: 100,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                fit: BoxFit.contain,
-                                image: AssetImage(
-                                  HomeScreen
-                                      .itemcategories[selectedIndex]["products"][index]["imgpath"],
-                                ),
-                              ),
-                            ),
+                            fit: BoxFit.contain,
                           ),
                         ),
                         const SizedBox(height: 10),

@@ -25,7 +25,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           );
           cartItems.add(decodedItem);
         }
-
+        //Step:3
         bool doesItemExist = false;
         for (var item in cartItems) {
           if (item["name"] == event.product["name"]) {
@@ -70,8 +70,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       // Calculate total
       double total = 0;
       for (var item in cartItems) {
-        final price =
-            double.tryParse(item["price"].replaceAll("Rs", "").trim()) ?? 0;
+        final price = double.tryParse(item["price"].replaceAll("Rs", "").trim()) ?? 0;
         total += price * (item["quantity"] ?? 1);
       }
 

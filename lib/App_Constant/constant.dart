@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../ui_pages/BottomNavigation/Explore.dart';
 import '../ui_pages/BottomNavigation/HomePage.dart';
 import '../ui_pages/BottomNavigation/allitems.dart';
+import '../ui_pages/BottomNavigation/orderDone.dart';
 import '../ui_pages/basehomepage.dart';
 
 class AppRoutes {
@@ -21,6 +22,8 @@ class AppRoutes {
   // This route for the All Items page navigation screen
   static const String ROUTE_ALLITEMS = "/allItems";
 
+  static const String ROUTE_ORDERDONE = "/orderDone";
+
   // Method to return a map of route names to widget builders
   static Map<String, WidgetBuilder> getRoute() => {
     ROUTE_BASEHOMEPAGE: (context) => Basehomepage(),
@@ -28,6 +31,7 @@ class AppRoutes {
     ROUTE_HOME: (context) => HomePageNavigation(),
     ROUTE_EXPLORE: (context) => ExplorePageNavigation(),
     ROUTE_ALLITEMS: (context) => AllItems(),
+    ROUTE_ORDERDONE: (context) => OrderAcceptedPage(),
   };
 }
 

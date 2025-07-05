@@ -17,6 +17,9 @@ class ExplorePageNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get the screen width for responsive layout
+    final screenWidth = MediaQuery.of(context).size.width;
+    //print("Screen Width: $screenWidth");
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
@@ -39,6 +42,7 @@ class ExplorePageNavigation extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(height: 20),
+              //search bar
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
@@ -79,11 +83,11 @@ class ExplorePageNavigation extends StatelessWidget {
                 itemCount: HomeScreen.itemcategories.length,
                 physics: NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 0.8,
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 20, //use for space between columns
-                  mainAxisSpacing: 20, //use for space between Rows
+                  crossAxisCount: screenWidth < 600 ? 2 : (screenWidth < 900 ? 3 : 5),
+                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 20,
                 ),
+
                 itemBuilder: (context, index) {
                   int sameindexforcolor = Random().nextInt(
                     _colorsAndbordercolor.length,
@@ -98,21 +102,20 @@ class ExplorePageNavigation extends StatelessWidget {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color:
-                            _colorsAndbordercolor[sameindexforcolor]["backcolor"],
+                        color: _colorsAndbordercolor[sameindexforcolor]["backcolor"],
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color:
-                              _colorsAndbordercolor[sameindexforcolor]["bordercolor"],
+                          color: _colorsAndbordercolor[sameindexforcolor]["bordercolor"],
                           width: 1,
                         ),
                       ),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Center(
                             child: Container(
-                              width: 120,
-                              height: 120,
+                              width: screenWidth * (screenWidth < 600 ? 0.25 : (screenWidth < 900 ? 0.16 : 0.10)),
+                              height: screenWidth * (screenWidth < 600 ? 0.25 : (screenWidth < 900 ? 0.16 : 0.10)),
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
@@ -124,21 +127,24 @@ class ExplorePageNavigation extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(height: 30),
+                          SizedBox(height: screenWidth < 600 ? 10 : 0),
                           Text(
                             "Fresh ${HomeScreen.itemcategories[index]["category"]}",
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               fontFamily: "Gilory_SemiBold",
-                              fontSize: 18,
+                              fontSize: screenWidth < 600 ? 16 : 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
+                          SizedBox(height: screenWidth < 600 ? 3 : 0),
                         ],
                       ),
                     ),
                   );
                 },
               ),
+              SizedBox(height: 20),
             ],
           ),
         ),

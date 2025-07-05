@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -105,13 +107,12 @@ class HomePageNavigation extends StatelessWidget {
             const SizedBox(height: 20),
             //Categories with Products
             ListView.builder(
-              shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
               itemCount: HomeScreen.itemcategories.length,
               itemBuilder: (context, categoryIndex) {
                 final category = HomeScreen.itemcategories[categoryIndex];
                 final products = category["products"];
-
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -131,131 +132,141 @@ class HomePageNavigation extends StatelessWidget {
                     // Product List (Horizontal)
                     SizedBox(
                       height: 220,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: products.length,
-                        itemBuilder: (context, index) {
-                          final product = products[index];
-
-                          return Container(
-                            margin: const EdgeInsets.only(right: 12),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 8),
-                            width: 160,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Colors.grey, width: 1),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Image
-                                Center(
-                                  child: Container(
-                                    width: 110,
-                                    height: 110,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        fit: BoxFit.contain,
-                                        image: AssetImage(product["imgpath"]),
+                      child: ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context).copyWith(
+                          dragDevices: {
+                            PointerDeviceKind.touch,
+                            PointerDeviceKind.mouse,
+                          },
+                        ),
+                        child: ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: products.length,
+                          itemExtent: 160,
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          itemBuilder: (context, index) {
+                            final product = products[index];
+                            return Container(
+                              padding: EdgeInsets.zero,
+                              margin: const EdgeInsets.only(right: 12),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                    color: Colors.grey, width: 1),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Image
+                                    Center(
+                                      child: Container(
+                                        width: 110,
+                                        height: 110,
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            fit: BoxFit.contain,
+                                            image: AssetImage(
+                                                product["imgpath"]),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-
-                                const SizedBox(height: 5),
-
-                                // Product Name
-                                Text(
-                                  product["name"],
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-
-                                // Quantity
-                                Text(
-                                  product["quantity"],
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-
-                                const Spacer(),
-
-                                // Price + Add Button
-                                Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                                  children: [
+                                    const SizedBox(height: 8),
+                                    // Product Name
                                     Text(
-                                      product["price"],
+                                      product["name"],
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: 35,
-                                      height: 35,
-                                      child: MaterialButton(
-                                        padding: EdgeInsets.zero,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              12),
-                                        ),
-                                        color: const Color(0xff53B175),
-                                        onPressed: () {
-                                          //Call Bloc
-                                          context.read<CartBloc>().add(
-                                            AddToCartEvent(product),
-                                          );
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              duration:
-                                              const Duration(seconds: 2),
-                                              backgroundColor:
-                                              const Color(0xff53B175),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                BorderRadius.circular(10),
-                                              ),
-                                              content: Row(
-                                                children: [
-                                                  const Icon(Icons.check_circle,
-                                                      color: Colors.white),
-                                                  const SizedBox(width: 10),
-                                                  Expanded(
-                                                    child: Text(
-                                                      "${product["name"]} added to cart!",
-                                                      style: const TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 16),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        child: const Icon(Icons.add,
-                                            color: Colors.white, size: 28),
+                                    // Quantity
+                                    Text(
+                                      product["quantity"],
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey,
                                       ),
-                                    )
+                                    ),
+                                    // Price + Add Button
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .spaceBetween,
+                                      children: [
+                                        Text(
+                                          product["price"],
+                                          style: const TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            context.read<CartBloc>().add(
+                                              AddToCartEvent(product),
+                                            );
+                                            ScaffoldMessenger
+                                                .of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                behavior: SnackBarBehavior
+                                                    .floating,
+                                                duration: const Duration(
+                                                    seconds: 2),
+                                                backgroundColor: const Color(
+                                                    0xff53B175),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius
+                                                      .circular(10),
+                                                ),
+                                                content: Row(
+                                                  children: [
+                                                    const Icon(
+                                                        Icons.check_circle,
+                                                        color: Colors.white),
+                                                    const SizedBox(width: 10),
+                                                    Expanded(
+                                                      child: Text(
+                                                        "${product["name"]} added to cart!",
+                                                        style: const TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 16),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          child: Container(
+                                            width: 35,
+                                            height: 35,
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xff53B175),
+                                              borderRadius: BorderRadius
+                                                  .circular(12),
+                                            ),
+                                            child: const Icon(Icons.add,
+                                                color: Colors.white, size: 20),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
-                              ],
-                            ),
-                          );
-                        },
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                    ),
+                    )
                   ],
                 );
               },

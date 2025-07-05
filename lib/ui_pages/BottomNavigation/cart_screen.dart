@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:grocerymart/App_Constant/constant.dart';
 import 'package:grocerymart/Bloc/cart_bloc.dart';
 import 'package:grocerymart/Bloc/cart_event.dart';
-import 'package:lottie/lottie.dart';
 
 import '../../Bloc/cart_state.dart';
 
@@ -266,37 +266,28 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                         ),
                         SizedBox(height: 20),
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                // Consider showing Lottie animation in a dialog or overlay
-                                // For now, it will just load the asset without displaying it visibly
-                                Lottie.asset(
-                                "assets/lottie_Animation/confetti.json",
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(0xff53b175),
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 30,
-                                  vertical: 15,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              child: Text(
-                                "Go to Checkout",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
+                        ElevatedButton(
+                          onPressed: () =>
+                              Navigator.pushReplacementNamed(
+                                  context, AppRoutes.ROUTE_ORDERDONE),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xff53b175),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 30,
+                              vertical: 15,
                             ),
-                          ],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Text(
+                            "Go to Checkout",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ],
                     ),
