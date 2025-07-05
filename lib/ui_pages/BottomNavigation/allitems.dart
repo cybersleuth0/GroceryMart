@@ -127,7 +127,6 @@ class AllItems extends StatelessWidget {
                                   ),
                                 ),
                                 onPressed: () {
-                                  // Add the product to the cart
                                   context.read<CartBloc>().add(
                                     AddToCartEvent(
                                       HomeScreen

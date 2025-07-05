@@ -17,9 +17,7 @@ class ExplorePageNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get the screen width for responsive layout
     final screenWidth = MediaQuery.of(context).size.width;
-    //print("Screen Width: $screenWidth");
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
